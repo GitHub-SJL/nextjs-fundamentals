@@ -1,8 +1,8 @@
-import NavBar from "@/componets/NavBar";
-
+import Seo from "@/componets/Seo";
 export default function Home() {
   return (
     <div>
+      <Seo title="Home"/>
       <h1>Hello</h1>
     </div>
   );
