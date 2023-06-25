@@ -1,16 +1,27 @@
 import Seo from "@/componets/Seo";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 const API_KEY = "fbea410dc10bda1a3c8129fba3707eb4";
 
 export default function Home({ results }) {
+  console.log(results);
   return (
     <div className="container">
       <Seo title="Home" />
       {results?.map((movie) => (
-        <div className="movie" key={movie.id}>
-          <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
-          <h4>{movie.original_title}</h4>
-        </div>
+        <Link
+          key={movie.id}
+          href={{
+            pathname: `/movies/${movie.id}`,
+            query: { title: movie.original_title },
+          }}
+          as={`/movies/${movie.id}`}
+        >
+          <div className="movie">
+            <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
+            <h4>{movie.original_title}</h4>
+          </div>
+        </Link>
       ))}
       <style jsx>{`
         .container {
@@ -18,6 +29,9 @@ export default function Home({ results }) {
           grid-template-columns: 1fr 1fr;
           padding: 20px;
           gap: 20px;
+        }
+        .movie {
+          cursor: pointer;
         }
         .movie img {
           max-width: 100%;
@@ -38,7 +52,7 @@ export default function Home({ results }) {
 }
 
 export async function getServerSideProps() {
-  const response = await fetch(`api/movies`);
+  const response = await fetch(`http://localhost:3000/api/movies`);
   const { results } = await response.json();
   return {
     props: {
